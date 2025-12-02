@@ -19,6 +19,7 @@ transboundary_opera = { path = ".", editable = true }
 [tool.pixi.feature.operainsar.dependencies]
 python = "3.12.*"
 pyproj = ">=3.7.2,<4"
+matplotlib = ">=3.10.8,<4"
 
 [tool.pixi.feature.operainsar.pypi-dependencies]
 ipykernel = ">=7.1.0,<8"
@@ -29,6 +30,8 @@ zarr = ">=3.1.5,<4"
 asf-search = ">=10.2.0,<11"
 rioxarray = ">=0.20.0,<0.21"
 geopandas = ">=1.1.1,<2"
+ipyleaflet = ">=0.20.0,<0.21"
+ultraplot = ">=1.66.0,<2"
 
 [tool.pixi.environments]
 operainsar = ["operainsar"]   
