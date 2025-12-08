@@ -2,7 +2,7 @@
 authors = [{name = "wc-caldwell", email = "clay.caldwell124@gmail.com"}]
 dependencies = []
 name = "Transboundary_Opera"
-requires-python = ">= 3.11"
+requires-python = ">= 3.10"
 version = "0.1.0"
 
 [build-system]
@@ -15,6 +15,13 @@ platforms = ["osx-arm64", "linux-64", "win-64", "osx-64"]
 
 [tool.pixi.pypi-dependencies]
 transboundary_opera = { path = ".", editable = true }
+
+[tool.pixi.feature.timeseries.dependencies]
+python = "3.10.*"
+mintpy = ">=1.6.3,<2"
+
+[tool.pixi.feature.timeseries.pypi-dependencies]
+ipykernel = ">=7.1.0,<8"
 
 [tool.pixi.feature.operainsar.dependencies]
 python = "3.12.*"
@@ -35,5 +42,6 @@ ultraplot = ">=1.66.0,<2"
 
 [tool.pixi.environments]
 operainsar = ["operainsar"]   
+timeseries = ["timeseries"]
 
 [tool.pixi.tasks]

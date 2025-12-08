@@ -2,7 +2,6 @@
 set -eo pipefail
 
 # Require these to be set by the workflow
-: "${BBOX:?Environment variable BBOX is required (e.g. \"minlon minlat maxlon maxlat\")}"
 : "${FRAME_ID:?Environment variable FRAME_ID is required}"
 : "${START:?Environment variable START (YYYY-MM-DD) is required}"
 : "${END:?Environment variable END (YYYY-MM-DD) is required}"
@@ -13,7 +12,6 @@ REFERENCE_METHOD=${REFERENCE_METHOD:-BORDER}
 OUTPUT_NAME=${OUTPUT_NAME:-disp-output-${FRAME_ID}.nc}
 
 echo "Inputs:"
-echo "  BBOX=$BBOX"
 echo "  FRAME_ID=$FRAME_ID"
 echo "  START=$START"
 echo "  END=$END"
@@ -25,7 +23,6 @@ echo
 echo "Downloading NetCDF subset..."
 opera-utils disp-s1-download \
     --output-dir subset-ncs \
-    --bbox $BBOX \
     --frame-id "$FRAME_ID" \
     --start-datetime "$START" \
     --end-datetime "$END" \
