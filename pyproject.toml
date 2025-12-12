@@ -24,6 +24,10 @@ h5py = ">=3.15.1,<4"
 
 [tool.pixi.feature.timeseries.pypi-dependencies]
 ipykernel = ">=7.1.0,<8"
+rioxarray = ">=0.19.0,<0.20"
+h5netcdf = ">=1.7.3,<2"
+zarr = ">=2.18.3,<3"
+rasterio = ">=1.4.3,<2"
 
 [tool.pixi.feature.operainsar.dependencies]
 python = "3.12.*"
@@ -47,3 +51,5 @@ operainsar = ["operainsar"]
 timeseries = ["timeseries"]
 
 [tool.pixi.tasks]
+
+
