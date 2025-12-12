@@ -457,6 +457,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/87/22/f020c047ae1346613db9322638186468238bcfa8849b4668a22b97faad65/dateparser-1.2.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/dc/0d/bf7ac329c132436c57124202b5b5ccd6366e5d8e75eeb184cf078c826e8d/debugpy-1.8.18-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4e/8c/f3147f5c4b73e7550fe5f9352eaa956ae838d5c51eb58e7a25b9f3e2643b/decorator-5.2.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/22/42/5a59f0bf998f00141230e31127be0994b5316f37ec7608023ca0a29bbfe4/dem_stitcher-2.5.12-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/55/e2/2537ebcff11c1ee1ff17d8d0b6f4db75873e3b0fb32c2d4a2ee31ecb310a/docstring_parser-0.17.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4d/86/9ac39d7ab1ba3231e9af8bc3e4e48870c4b3d46f545e451979aa176bc9ba/dolphin-0.42.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/1a/40/e77d6d4ea84fd93355f1c58fd71d4638af575fc2abcab99d19e1800d2d43/dolphin_utils-0.4.2-py3-none-any.whl
@@ -819,6 +820,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/87/22/f020c047ae1346613db9322638186468238bcfa8849b4668a22b97faad65/dateparser-1.2.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/dc/0d/bf7ac329c132436c57124202b5b5ccd6366e5d8e75eeb184cf078c826e8d/debugpy-1.8.18-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4e/8c/f3147f5c4b73e7550fe5f9352eaa956ae838d5c51eb58e7a25b9f3e2643b/decorator-5.2.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/22/42/5a59f0bf998f00141230e31127be0994b5316f37ec7608023ca0a29bbfe4/dem_stitcher-2.5.12-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/55/e2/2537ebcff11c1ee1ff17d8d0b6f4db75873e3b0fb32c2d4a2ee31ecb310a/docstring_parser-0.17.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4d/86/9ac39d7ab1ba3231e9af8bc3e4e48870c4b3d46f545e451979aa176bc9ba/dolphin-0.42.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/1a/40/e77d6d4ea84fd93355f1c58fd71d4638af575fc2abcab99d19e1800d2d43/dolphin_utils-0.4.2-py3-none-any.whl
@@ -1181,6 +1183,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/87/22/f020c047ae1346613db9322638186468238bcfa8849b4668a22b97faad65/dateparser-1.2.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/dc/0d/bf7ac329c132436c57124202b5b5ccd6366e5d8e75eeb184cf078c826e8d/debugpy-1.8.18-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4e/8c/f3147f5c4b73e7550fe5f9352eaa956ae838d5c51eb58e7a25b9f3e2643b/decorator-5.2.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/22/42/5a59f0bf998f00141230e31127be0994b5316f37ec7608023ca0a29bbfe4/dem_stitcher-2.5.12-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/55/e2/2537ebcff11c1ee1ff17d8d0b6f4db75873e3b0fb32c2d4a2ee31ecb310a/docstring_parser-0.17.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4d/86/9ac39d7ab1ba3231e9af8bc3e4e48870c4b3d46f545e451979aa176bc9ba/dolphin-0.42.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/1a/40/e77d6d4ea84fd93355f1c58fd71d4638af575fc2abcab99d19e1800d2d43/dolphin_utils-0.4.2-py3-none-any.whl
@@ -1535,6 +1538,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/87/22/f020c047ae1346613db9322638186468238bcfa8849b4668a22b97faad65/dateparser-1.2.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/14/84/1142d16ee87f9bf4db5857b0b38468af602815eb73a9927436c79619beed/debugpy-1.8.18-cp310-cp310-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/4e/8c/f3147f5c4b73e7550fe5f9352eaa956ae838d5c51eb58e7a25b9f3e2643b/decorator-5.2.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/22/42/5a59f0bf998f00141230e31127be0994b5316f37ec7608023ca0a29bbfe4/dem_stitcher-2.5.12-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/55/e2/2537ebcff11c1ee1ff17d8d0b6f4db75873e3b0fb32c2d4a2ee31ecb310a/docstring_parser-0.17.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/4d/86/9ac39d7ab1ba3231e9af8bc3e4e48870c4b3d46f545e451979aa176bc9ba/dolphin-0.42.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/1a/40/e77d6d4ea84fd93355f1c58fd71d4638af575fc2abcab99d19e1800d2d43/dolphin_utils-0.4.2-py3-none-any.whl
@@ -5460,6 +5464,28 @@ packages:
   version: 5.2.1
   sha256: d316bb415a2d9e2d2b3abcc4084c6502fc09240e292cd76a76afc106a1c8e04a
   requires_python: '>=3.8'
+- pypi: https://files.pythonhosted.org/packages/22/42/5a59f0bf998f00141230e31127be0994b5316f37ec7608023ca0a29bbfe4/dem_stitcher-2.5.12-py3-none-any.whl
+  name: dem-stitcher
+  version: 2.5.12
+  sha256: d83f82d1c58227d40ad0870ecfeb871219ee3c37e47964a7ef76bece895f2e86
+  requires_dist:
+  - affine
+  - boto3
+  - geopandas
+  - importlib-metadata
+  - numpy
+  - pyproj
+  - rasterio
+  - requests
+  - shapely
+  - tqdm
+  - pytest ; extra == 'develop'
+  - pytest-cov ; extra == 'develop'
+  - flake8 ; extra == 'develop'
+  - flake8-import-order ; extra == 'develop'
+  - flake8-blind-except ; extra == 'develop'
+  - flake8-builtins ; extra == 'develop'
+  requires_python: '>=3.9'
 - conda: https://conda.anaconda.org/conda-forge/noarch/distlib-0.4.0-pyhd8ed1ab_0.conda
   sha256: 6d977f0b2fc24fee21a9554389ab83070db341af6d6f09285360b2e09ef8b26e
   md5: 003b8ba0a94e2f1e117d0bd46aebc901
@@ -17900,7 +17926,7 @@ packages:
 - pypi: ./
   name: transboundary-opera
   version: 0.1.0
-  sha256: f0e22468b8fe249dbbaae24c3a30a1feef347ebb4507fd67e7787330077a7adf
+  sha256: 4691ccea014ad82bf9e23bfbad8aaf9da9d2bea7a14668f000a64dd6a0ecccef
   requires_python: '>=3.10'
   editable: true
 - pypi: https://files.pythonhosted.org/packages/1b/a9/e3aee762739c1d7528da1c3e06d518503f8b6c439c35549b53735ba52ead/typeguard-4.4.4-py3-none-any.whl

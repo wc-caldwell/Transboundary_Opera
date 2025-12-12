@@ -88,7 +88,7 @@ from mintpy.utils import arg_utils, ptime, readfile, writefile
 from mintpy.utils import utils as ut
 from mintpy.utils.utils0 import azimuth2heading_angle, calc_azimuth_from_east_north_obs
 from opera_utils import get_dates
-from pst_dolphin_utils import (
+from transboundary_opera.pst_dolphin_utils import (
     BackgroundRasterWriter,
     HDF5StackReader,
     create_external_files,

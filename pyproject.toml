@@ -31,10 +31,9 @@ rasterio = ">=1.4.3,<2"
 
 [tool.pixi.feature.operainsar.dependencies]
 python = "3.10.*"
-pyproj = ">=3.7.1,<4"
 matplotlib = ">=3.10.8,<4"
-gdal = ">=3.11.4,<4"
 mintpy = ">=1.6.3,<2"
+gdal = ">=3.11.4,<4"
 
 [tool.pixi.feature.operainsar.pypi-dependencies]
 ipykernel = ">=7.1.0,<8"
@@ -51,10 +50,11 @@ netcdf4 = ">=1.7.3,<2"
 networkx = ">=3.4.2,<4"
 zarr = ">=2.18.3,<3"
 dolphin-utils = ">=0.4.2,<0.5"
+opera-utils = ">=0.25.3,<0.26"
+dem-stitcher = ">=2.5.12,<3"
 
 [tool.pixi.environments]
 operainsar = ["operainsar"]   
 timeseries = ["timeseries"]
 
 [tool.pixi.tasks]
-
