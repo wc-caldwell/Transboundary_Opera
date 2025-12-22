@@ -34,6 +34,7 @@ python = "3.12.*"
 pyproj = ">=3.7.2,<4"
 matplotlib = ">=3.10.8,<4"
 gdal = ">=3.12.0,<4"
+libgdal-netcdf = ">=3.12.0,<4"
 
 [tool.pixi.feature.operainsar.pypi-dependencies]
 ipykernel = ">=7.1.0,<8"
