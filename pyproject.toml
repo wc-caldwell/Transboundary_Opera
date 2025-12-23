@@ -53,9 +53,25 @@ botocore = ">=1.42.8,<2"
 netcdf4 = ">=1.7.3,<2"
 networkx = ">=3.6.1,<4"
 
+[tool.pixi.feature.operaapp.dependencies]
+python = "3.11.*"
+mintpy = ">=1.6.3,<2"
+
+[tool.pixi.feature.operaapp.pypi-dependencies]
+ipykernel = ">=7.1.0,<8"
+opera-utils = { version = ">=0.25.3,<0.26", extras = ["all"] }
+asf-search = ">=11.0.0,<12"
+ultraplot = ">=1.66.0,<2"
+boto3 = ">=1.41.5,<2"
+botocore = ">=1.41.5,<2"
+netcdf4 = ">=1.7.3,<2"
+jax = ">=0.4.38,<0.9"
+dem-stitcher = ">=2.5.12,<3"
+tile-mate = ">=0.0.15,<0.0.16"
+
 [tool.pixi.environments]
 operainsar = ["operainsar"]   
 timeseries = ["timeseries"]
+operaapp = ["operaapp"]
 
 [tool.pixi.tasks]
-
