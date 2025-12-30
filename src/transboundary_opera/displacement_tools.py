@@ -76,6 +76,8 @@ def create_geom_h5_with_ref(east_tif, north_tif, ref_h5):
         out_h5 = str(ref_h5).replace('timeseries', 'geom')
         with h5py.File(out_h5, 'w') as f_out:
             # Create datasets
+            f_out.create_dataset('losEast', data=east.astype(np.float32))
+            f_out.create_dataset('losNorth', data=north.astype(np.float32))
             f_out.create_dataset('incidenceAngle', data=inc_angle.astype(np.float32))
             f_out.create_dataset('azimuthAngle', data=az_angle.astype(np.float32))
             
