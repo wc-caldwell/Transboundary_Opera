@@ -7,54 +7,48 @@ import h5py
 import rasterio as rio
 
 
-def get_opera_frame_ids(shapefile_path):
+def get_unique_frame_ids(gdf):
     """
-    Identifies OPERA DISP-S1 Frame IDs intersecting a shapefile.
-    """
-    # 1. Read the shapefile and convert to WKT (Well-Known Text)
-    # asf_search requires WKT for spatial queries
-    gdf = gpd.read_file(shapefile_path)
+    Extract unique OPERA frame IDs from a GeoDataFrame by searching ASF.
     
-    # Ensure we are in WGS84 (Lat/Lon)
-    if gdf.crs.to_epsg() != 4326:
-        gdf = gdf.to_crs(epsg=4326)
-        
-    # Combine all features into a single geometry (convex hull) for the search
-    aoi_wkt = gdf.unary_union.convex_hull.wkt
-
-    print(f"Searching ASF for OPERA-DISP products intersecting your AOI...")
-
-    # 2. Search ASF for OPERA DISP-S1 products
-    # We only need metadata, so we limit results to avoid long wait times.
-    # We filter by the OPERA-S1 dataset and DISP product type.
-    results = asf.geo_search(
-        intersectsWith=aoi_wkt,
-        dataset=asf.DATASET.OPERA_S1,
-        processingLevel=asf.PRODUCT_TYPE.DISP_S1,
-        maxResults=50  # We only need a few results to identify the Frame IDs
-    )
-
-    if not results:
-        print("No intersecting OPERA DISP products found.")
-        return []
-
-    # 3. Extract Frame IDs from Filenames
-    # Filename format: OPERA_L3_DISP-S1_IW_Fxxxxx_VV_...
-    # We use regex to find the pattern _F followed by 5 digits
-    frame_ids = set()
+    Parameters:
+    -----------
+    gdf : GeoDataFrame
+        GeoDataFrame with geometry column
+    search_start : datetime
+        Start date for ASF search
+    search_end : datetime
+        End date for ASF search
+    
+    Returns:
+    --------
+    list : Sorted list of unique frame IDs
+    """
+    all_frame_ids = []
     pattern = re.compile(r'_F(\d{5})_')
 
-    for product in results:
-        filename = product.properties['fileName']
-        match = pattern.search(filename)
-        if match:
-            # We strip the underscore and 'F' to get the raw ID number if needed, 
-            # but usually, you want the integer or the string. 
-            # The regex group matches the digits inside (e.g., '12345').
-            frame_id_str = match.group(1) 
-            frame_ids.add(int(frame_id_str))
+    for entry, row in gdf.iterrows():
+        results = asf.geo_search(
+            intersectsWith=row.geometry.convex_hull.wkt,
+            dataset=asf.DATASET.OPERA_S1,
+            processingLevel=asf.PRODUCT_TYPE.DISP_S1,
+            maxResults=50
+        )
+        
+        current_frame_ids = set()
+        for product in results:
+            filename = product.properties['fileName']
+            match = pattern.search(filename)
+            if match:
+                frame_id_str = match.group(1) 
+                current_frame_ids.add(int(frame_id_str))
+        
+        all_frame_ids.append(sorted(list(current_frame_ids)))
 
-    return sorted(list(frame_ids))
+    gdf['frame_ids'] = all_frame_ids
+    unique_frame_ids = sorted({fid for ids in gdf['frame_ids'] if isinstance(ids, (list, tuple, set)) for fid in ids})
+    
+    return unique_frame_ids
 
 def create_geom_h5_with_ref(east_tif, north_tif, ref_h5):
     """
