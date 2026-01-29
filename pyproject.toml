@@ -69,6 +69,7 @@ netcdf4 = ">=1.7.3,<2"
 jax = ">=0.4.38,<0.9"
 dem-stitcher = ">=2.5.12,<3"
 tile-mate = ">=0.0.15,<0.0.16"
+earthaccess = ">=0.15.1,<0.16"
 
 [tool.pixi.environments]
 operainsar = ["operainsar"]   

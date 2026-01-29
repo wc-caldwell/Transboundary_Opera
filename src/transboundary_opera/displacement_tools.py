@@ -1,52 +1,92 @@
 import os
 import geopandas as gpd
-import asf_search as asf
-import re
 import numpy as np
 import h5py
 import rasterio as rio
+import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import asf_search as asf
+
+# Compile once at module level
+FRAME_PATTERN = re.compile(r'_F(\d{5})_')
 
 
-def get_unique_frame_ids(gdf):
+def extract_frame_ids(results):
+    """Extract frame IDs from ASF search results."""
+    return {
+        int(match.group(1))
+        for product in results
+        if (match := FRAME_PATTERN.search(product.properties['fileName']))
+    }
+
+
+def search_single_geometry(geometry):
+    """Search ASF for a single geometry."""
+    results = asf.geo_search(
+        intersectsWith=geometry.convex_hull.wkt,
+        dataset=asf.DATASET.OPERA_S1,
+        processingLevel=asf.PRODUCT_TYPE.DISP_S1,
+        maxResults=50
+    )
+    return extract_frame_ids(results)
+
+
+def get_unique_frame_ids(gdf, track_per_row=True, max_workers=8):
     """
     Extract unique OPERA frame IDs from a GeoDataFrame by searching ASF.
     
-    Parameters:
-    -----------
+    Parameters
+    ----------
     gdf : GeoDataFrame
         GeoDataFrame with geometry column
-    search_start : datetime
-        Start date for ASF search
-    search_end : datetime
-        End date for ASF search
+    track_per_row : bool
+        If True, stores frame_ids per row (slower but preserves mapping).
+        If False, uses unified geometry search (faster).
+    max_workers : int
+        Maximum parallel requests for per-row searching
     
-    Returns:
-    --------
+    Returns
+    -------
     list : Sorted list of unique frame IDs
     """
-    all_frame_ids = []
-    pattern = re.compile(r'_F(\d{5})_')
-
-    for entry, row in gdf.iterrows():
+    if not track_per_row:
+        # FAST PATH: Combine all geometries into one search
+        unified_geom = gdf.geometry.union_all()  # or .unary_union for older geopandas
         results = asf.geo_search(
-            intersectsWith=row.geometry.convex_hull.wkt,
+            intersectsWith=unified_geom.convex_hull.wkt,
             dataset=asf.DATASET.OPERA_S1,
             processingLevel=asf.PRODUCT_TYPE.DISP_S1,
-            maxResults=50
+            maxResults=437  # Increase limit for unified search
         )
-        
-        current_frame_ids = set()
-        for product in results:
-            filename = product.properties['fileName']
-            match = pattern.search(filename)
-            if match:
-                frame_id_str = match.group(1) 
-                current_frame_ids.add(int(frame_id_str))
-        
-        all_frame_ids.append(sorted(list(current_frame_ids)))
 
-    gdf['frame_ids'] = all_frame_ids
-    unique_frame_ids = sorted({fid for ids in gdf['frame_ids'] if isinstance(ids, (list, tuple, set)) for fid in ids})
+        return sorted(extract_frame_ids(results))
+    
+    # PER-ROW PATH: Parallel requests with per-geometry tracking
+    frame_ids_by_idx = {}
+    
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_idx = {
+            executor.submit(search_single_geometry, row.geometry): idx
+            for idx, row in gdf.iterrows()
+        }
+        
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            try:
+                frame_ids_by_idx[idx] = sorted(future.result())
+            except Exception as e:
+                print(f"Search failed for index {idx}: {e}")
+                frame_ids_by_idx[idx] = []
+    
+    # Assign results back in original order
+    gdf['frame_ids'] = [frame_ids_by_idx.get(idx, []) for idx in gdf.index]
+    
+    # Flatten and deduplicate
+    unique_frame_ids = sorted({
+        fid 
+        for ids in gdf['frame_ids'] 
+        for fid in ids
+    })
     
     return unique_frame_ids
 

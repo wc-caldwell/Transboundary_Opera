@@ -3,15 +3,15 @@ import numpy as np
 from pyproj import Transformer
 from mintpy.asc_desc2horz_vert import asc_desc2horz_vert
 from mintpy.utils import ptime, readfile, utils as ut, writefile
-
+import h5py
 
 class InSARDecomposer:
     """Process overlapping InSAR pairs and decompose LOS to horizontal/vertical components."""
     
-    def __init__(self, overlapping_pairs, ds_name='timeseries', azimuth=-90):
+    def __init__(self, overlapping_pairs, ds_name='timeseries', angle=-90):
         self.overlapping_pairs = overlapping_pairs
         self.ds_name = ds_name
-        self.azimuth = azimuth
+        self.angle = angle
         self.failed_pairs = []
         self.successful_pairs = []
     
@@ -35,36 +35,44 @@ class InSARDecomposer:
     
     def _find_max_coherence_location(self, coh_data, bbox, grid):
         """Find the location of maximum coherence within the processed region.
-        
+
         Args:
-            coh_data: 2D coherence array (already subsetted to bbox)
+            coh_data: 2D coherence array (already subsetted to bbox), 
+                      should be pre-masked to valid timeseries pixels
             bbox: Bounding box (S, N, W, E)
             grid: Grid parameters dict with lat_step, lon_step
-            
+
         Returns:
             (lat, lon) of max coherence location in geographic coordinates
+
+        Raises:
+            ValueError: If no valid (non-NaN) pixels exist in the coherence data
         """
+        # Check if we have any valid data
+        if np.all(np.isnan(coh_data)):
+            raise ValueError(
+                "No valid pixels found with both coherence and timeseries data. "
+                "Check that bounding box overlaps with valid data in both tracks."
+            )
+
         max_idx = np.unravel_index(np.nanargmax(coh_data), coh_data.shape)
         row, col = max_idx
-        
+
         S, N, W, E = bbox
-        
-        # Convert pixel indices to geographic coordinates
-        # Row 0 corresponds to N (northern edge), increasing row goes south
-        # Col 0 corresponds to W (western edge), increasing col goes east
-        ref_lat = N + row * grid['lat_step']  # lat_step is negative
-        ref_lon = W + col * grid['lon_step']  # lon_step is positive
-        
+
+        ref_lat = N + row * grid['lat_step']
+        ref_lon = W + col * grid['lon_step']
+
         return ref_lat, ref_lon
     
-    def _build_output_metadata(self, atr, grid, bbox, ref_coords):
+    def _build_output_metadata(self, atr, grid, bbox, ref_coords, dates=None):
         """Build metadata dictionary for output files."""
         _, N, W, _ = bbox
         ref_lat, ref_lon = ref_coords
-        
+
         out_atr = atr.copy()
         out_atr.update({
-            'FILE_TYPE': 'displacement',
+            'FILE_TYPE': 'timeseries',
             'WIDTH': str(grid['width']),
             'LENGTH': str(grid['length']),
             'X_STEP': str(grid['lon_step']),
@@ -72,51 +80,81 @@ class InSARDecomposer:
             'X_FIRST': str(W),
             'Y_FIRST': str(N),
         })
-        
+
         ref_y, ref_x = ut.coordinate(out_atr).geo2radar(ref_lat, ref_lon)[0:2]
         out_atr['REF_Y'] = int(ref_y)
         out_atr['REF_X'] = int(ref_x)
-        
+
+        if dates:
+            out_atr['DATE12'] = f"{dates[0]}-{dates[-1]}"
+
         return out_atr
-    
-    def _read_pair_data(self, paths, atr_list, grid, bbox):
-        """Read all data arrays for a pair of files."""
+    def _read_pair_data(self, paths, atr_list, grid, bbox, common_dates=None):
+        """Read all data arrays for a pair of files - common time slices only.
+
+        Parameters
+        ----------
+        paths : dict
+            Dictionary with file paths for timeseries, geometry, coherence
+        atr_list : list
+            List of attribute dictionaries for each file
+        grid : dict
+            Grid parameters (length, width, lat_step, lon_step)
+        bbox : tuple
+            Bounding box (S, N, W, E)
+        common_dates : list, optional
+            Pre-computed list of common dates. If None, will compute from files.
+        """
         N, W = bbox[1], bbox[2]
-        shape = (len(paths['timeseries']), grid['length'], grid['width'])
-        
-        dlos = np.zeros(shape, dtype=np.float32)
-        los_inc_angle = np.zeros(shape, dtype=np.float32)
-        los_az_angle = np.zeros(shape, dtype=np.float32)
-        coh = np.zeros(shape, dtype=np.float32)
-        
+
+        # Get date lists from each file (needed for index lookup)
+        date_lists = []
+        for ts_file in paths['timeseries']:
+            with h5py.File(ts_file, 'r') as f:
+                dates = [d.decode() for d in f['date'][:]]
+                date_lists.append(dates)
+
+        # Use pre-computed common_dates if provided, otherwise compute
+        if common_dates is None:
+            common_dates = sorted(set(date_lists[0]) & set(date_lists[1]))
+
+        if len(common_dates) == 0:
+            raise ValueError("No common dates between the two timeseries")
+
+        print(f"  Using {len(common_dates)} common dates out of {len(date_lists[0])} and {len(date_lists[1])}")
+
+        n_times = len(common_dates)
+        shape_3d = (len(paths['timeseries']), n_times, grid['length'], grid['width'])
+        shape_2d = (len(paths['timeseries']), grid['length'], grid['width'])
+
+        dlos = np.zeros(shape_3d, dtype=np.float32)
+        los_inc_angle = np.zeros(shape_2d, dtype=np.float32)
+        los_az_angle = np.zeros(shape_2d, dtype=np.float32)
+        coh = np.zeros(shape_2d, dtype=np.float32)
+
         for i, (atr, ts_file) in enumerate(zip(atr_list, paths['timeseries'])):
             coord = ut.coordinate(atr)
             y0, x0 = coord.lalo2yx(N, W)
             box = (x0, y0, x0 + grid['width'], y0 + grid['length'])
-            
+
             coh[i] = readfile.read(paths['coherence'][i], box=box, datasetName='avgSpatialCoh')[0]
-            data, _ = readfile.read(ts_file, box=box, datasetName=self.ds_name)
-            dlos[i] = data[0]
             los_inc_angle[i] = readfile.read(paths['geometry'][i], box=box, datasetName='incidenceAngle')[0]
-            los_az_angle[i] = readfile.read(paths['geometry'][i], box=box, datasetName='azimuthAngle')[0]
-        
-        return {'dlos': dlos, 'inc': los_inc_angle, 'az': los_az_angle, 'coh': coh}
-    
-    def _write_outputs(self, dhorz, dvert, out_atr, ref_file, tracks):
-        """Write horizontal and vertical components to HDF5 files."""
-        out_dir = ref_file.parent.parent.parent
-        outfiles = {
-            'horz': out_dir / f'{tracks[0]}_{tracks[1]}_dhorz.h5',
-            'vert': out_dir / f'{tracks[0]}_{tracks[1]}_dvert.h5',
+            los_az_angle[i] = readfile.read(paths['geometry'][i], box=box, datasetName='angleAngle')[0]
+
+            # Read only common dates
+            full_data, _ = readfile.read(ts_file, box=box, datasetName=self.ds_name)
+            for t, date in enumerate(common_dates):
+                date_idx = date_lists[i].index(date)
+                dlos[i, t] = full_data[date_idx]
+
+        return {
+            'dlos': dlos, 
+            'inc': los_inc_angle, 
+            'az': los_az_angle, 
+            'coh': coh, 
+            'n_times': n_times,
+            'dates': common_dates
         }
-        
-        print(f'  Writing horizontal: {outfiles["horz"]}')
-        writefile.write(dhorz, out_file=str(outfiles['horz']), metadata=out_atr, ref_file=ref_file)
-        
-        print(f'  Writing vertical:   {outfiles["vert"]}')
-        writefile.write(dvert, out_file=str(outfiles['vert']), metadata=out_atr, ref_file=ref_file)
-        
-        return outfiles
     
     def process_pair(self, pair):
         """Process a single overlapping pair and return output paths."""
@@ -124,26 +162,83 @@ class InSARDecomposer:
         paths = self._get_file_paths(timeseries_files)
         tracks = [timeseries_files[0].parts[-3], timeseries_files[1].parts[-3]]
         ref_file = timeseries_files[0]
-        
+
         atr_list = [readfile.read_attribute(f) for f in timeseries_files]
         grid = self._compute_grid_params(atr_list[0], pair['bbox'])
-        
-        # Read all data (subsetted to bbox)
-        data = self._read_pair_data(paths, atr_list, grid, pair['bbox'])
-        
-        # Decompose LOS to horizontal/vertical
-        dlos_clean = np.nan_to_num(data['dlos'], nan=0.0)
-        dhorz, dvert = asc_desc2horz_vert(dlos_clean, data['inc'], data['az'], self.azimuth)
-        
-        # Find reference point from max coherence WITHIN the processed region
-        # Use mean coherence across both tracks for more robust reference selection
+
+        # Read all data - pass pre-computed common_dates if available
+        common_dates = pair.get('common_dates', None)
+        data = self._read_pair_data(paths, atr_list, grid, pair['bbox'], common_dates=common_dates)
+
+        n_times = data['n_times']
+        length, width = grid['length'], grid['width']
+
+        # Allocate output arrays for all time slices
+        dhorz_all = np.zeros((n_times, length, width), dtype=np.float32)
+        dvert_all = np.zeros((n_times, length, width), dtype=np.float32)
+
+        # Decompose each time slice
+        print(f"  Decomposing {n_times} time slices...")
+        for t in range(n_times):
+            dlos_t = data['dlos'][:, t, :, :]
+
+            # Create mask where BOTH tracks have valid data for this time slice
+            valid_mask = ~np.isnan(dlos_t[0]) & ~np.isnan(dlos_t[1])
+
+            dlos_clean = np.nan_to_num(dlos_t, nan=0.0)
+
+            dhorz_t, dvert_t = asc_desc2horz_vert(
+                dlos_clean, data['inc'], data['az'], self.angle
+            )
+
+            # Apply mask - only keep values where both tracks had valid data
+            dhorz_all[t] = np.where(valid_mask, dhorz_t, np.nan)
+            dvert_all[t] = np.where(valid_mask, dvert_t, np.nan)
+
+        # Find reference point from max coherence within valid data region
+        # Use first time slice's valid mask
+        valid_mask_t0 = ~np.isnan(data['dlos'][0, 0, :, :]) & ~np.isnan(data['dlos'][1, 0, :, :])
         mean_coh = np.nanmean(data['coh'], axis=0)
-        ref_coords = self._find_max_coherence_location(mean_coh, pair['bbox'], grid)
-        
+        masked_coh = np.where(valid_mask_t0, mean_coh, np.nan)
+
+        ref_coords = self._find_max_coherence_location(masked_coh, pair['bbox'], grid)
+
         # Build metadata and write
-        out_atr = self._build_output_metadata(atr_list[0], grid, pair['bbox'], ref_coords)
-        return self._write_outputs(dhorz, dvert, out_atr, ref_file, tracks)
+        out_atr = self._build_output_metadata(atr_list[0], grid, pair['bbox'], ref_coords, data['dates'])
+        return self._write_outputs(dhorz_all, dvert_all, out_atr, ref_file, tracks, data['dates'])
+
     
+    def _write_outputs(self, dhorz, dvert, out_atr, ref_file, tracks, dates):
+        """Write horizontal and vertical components to HDF5 files."""
+        out_dir = ref_file.parent.parent.parent
+        outfiles = {
+            'horz': out_dir / f'{tracks[0]}_{tracks[1]}_dhorz.h5',
+            'vert': out_dir / f'{tracks[0]}_{tracks[1]}_dvert.h5',
+        }
+
+        # MintPy timeseries format expects:
+        # - 'timeseries': 3D array (n_times, length, width)
+        # - 'date': 1D array of dates as bytes
+        date_array = np.array([d.encode('utf-8') for d in dates], dtype='S8')
+
+        horz_dict = {
+            'timeseries': dhorz,
+            'date': date_array,
+        }
+
+        vert_dict = {
+            'timeseries': dvert,
+            'date': date_array,
+        }
+
+        print(f'  Writing horizontal: {outfiles["horz"]}')
+        writefile.write(horz_dict, out_file=str(outfiles['horz']), metadata=out_atr)
+
+        print(f'  Writing vertical:   {outfiles["vert"]}')
+        writefile.write(vert_dict, out_file=str(outfiles['vert']), metadata=out_atr)
+
+        return outfiles
+
     def run(self, verbose=True):
         """Process all overlapping pairs."""
         self.failed_pairs = []
