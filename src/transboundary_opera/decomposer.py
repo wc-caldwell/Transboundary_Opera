@@ -89,6 +89,7 @@ class InSARDecomposer:
             out_atr['DATE12'] = f"{dates[0]}-{dates[-1]}"
 
         return out_atr
+    
     def _read_pair_data(self, paths, atr_list, grid, bbox, common_dates=None):
         """Read all data arrays for a pair of files - common time slices only.
 

@@ -6,6 +6,7 @@ import rasterio as rio
 import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import asf_search as asf
+from shapely import geometry
 
 # Compile once at module level
 FRAME_PATTERN = re.compile(r'_F(\d{5})_')
@@ -52,8 +53,9 @@ def get_unique_frame_ids(gdf, track_per_row=True, max_workers=8):
     if not track_per_row:
         # FAST PATH: Combine all geometries into one search
         unified_geom = gdf.geometry.union_all()  # or .unary_union for older geopandas
+        bbox_geom = geometry.box(*unified_geom.bounds)
         results = asf.geo_search(
-            intersectsWith=unified_geom.convex_hull.wkt,
+            intersectsWith=bbox_geom.wkt,
             dataset=asf.DATASET.OPERA_S1,
             processingLevel=asf.PRODUCT_TYPE.DISP_S1,
             maxResults=437  # Increase limit for unified search
@@ -66,7 +68,7 @@ def get_unique_frame_ids(gdf, track_per_row=True, max_workers=8):
     
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_idx = {
-            executor.submit(search_single_geometry, row.geometry): idx
+            executor.submit(search_single_geometry, geometry.box(*row.geometry.bounds)): idx
             for idx, row in gdf.iterrows()
         }
         

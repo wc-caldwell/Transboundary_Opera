@@ -133,6 +133,7 @@ def get_asc_desc_pairs(data_dir, min_overlap_pixels=100, min_common_dates=2):
                 continue
             
     return overlapping_pairs
+
 def plot_displacements(horz_file, vert_file, time_idx=None, date=None, vlim=None, cmap='RdBu', gdf=None, boundary_color='black', boundary_linewidth=1.5):
     """
     Plot horizontal and vertical displacement maps.

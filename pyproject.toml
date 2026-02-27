@@ -57,6 +57,7 @@ networkx = ">=3.6.1,<4"
 python = "3.11.*"
 mintpy = ">=1.6.3,<2"
 libgdal-hdf5 = ">=3.12.1,<4"
+libgdal-netcdf = ">=3.12.1,<4"
 
 [tool.pixi.feature.operaapp.pypi-dependencies]
 ipykernel = ">=7.1.0,<8"
