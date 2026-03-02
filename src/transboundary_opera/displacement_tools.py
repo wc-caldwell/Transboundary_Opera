@@ -7,10 +7,9 @@ import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import asf_search as asf
 from shapely import geometry
+from shapely.geometry import shape
 
-# Compile once at module level
 FRAME_PATTERN = re.compile(r'_F(\d{5})_')
-
 
 def extract_frame_ids(results):
     """Extract frame IDs from ASF search results."""
@@ -126,3 +125,55 @@ def create_geom_h5_with_ref(east_tif, north_tif, ref_h5):
             f_out.attrs['FILE_TYPE'] = 'geometry'
 
     print(f"Created geom file synced with {ref_h5}")
+
+def get_frame_geometries(frame_ids, gdf_bounds=None):
+    """
+    Fetch OPERA frame geometries from ASF for given frame IDs.
+    
+    Parameters
+    ----------
+    frame_ids : list
+        List of integer frame IDs
+    gdf_bounds : tuple, optional
+        Bounding box (minx, miny, maxx, maxy) to limit search area
+    
+    Returns
+    -------
+    GeoDataFrame
+        GeoDataFrame with frame_id and geometry columns
+    """
+    if not frame_ids:
+        return gpd.GeoDataFrame(columns=['frame_id', 'geometry'], crs='EPSG:4326')
+    
+    # Build search kwargs
+    search_kwargs = dict(
+        dataset=asf.DATASET.OPERA_S1,
+        processingLevel=asf.PRODUCT_TYPE.DISP_S1,
+        maxResults=500
+    )
+    
+    if gdf_bounds is not None:
+        minx, miny, maxx, maxy = gdf_bounds
+        search_kwargs['intersectsWith'] = f'POLYGON(({minx} {miny}, {maxx} {miny}, {maxx} {maxy}, {minx} {maxy}, {minx} {miny}))'
+    
+    results = asf.geo_search(**search_kwargs)
+    
+    # Extract unique frame geometries
+    frame_ids_set = set(frame_ids)
+    frame_geoms = {}
+    
+    for product in results:
+        filename = product.properties['fileName']
+        match = FRAME_PATTERN.search(filename)
+        if match:
+            fid = int(match.group(1))
+            if fid in frame_ids_set and fid not in frame_geoms:
+                frame_geoms[fid] = shape(product.geometry)
+    
+    # Build GeoDataFrame
+    gdf_frames = gpd.GeoDataFrame(
+        [{'frame_id': fid, 'geometry': geom} for fid, geom in frame_geoms.items()],
+        crs='EPSG:4326'
+    )
+    
+    return gdf_frames
