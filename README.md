@@ -38,3 +38,36 @@
     └── transboundary_opera
         └── # where the helper functions and classes for the study are located. Functions and classes used to retrieve, process, and assess data for each aquifer
 ```
+
+
+### Computational Requirements
+
+This repository is built on [the Pixi package management tool](https://pixi.prefix.dev/latest/). This tool has built-in support for work on multiple platforms (Linux, macOS, Windows, and more), organizes and composes multiple computing environments, manages complex data pipelines via tasks, and has many more features built-in. Additionally, a Dockerfile is provided which will build an x64-based Linux image with Pixi preinstalled. This will allow the user to choose to download Pixi on their machine locally, or spin up a Docker container for better reproducibility.
+
+This repository utilizes the *pixi.toml* manifest to define two Python environments:
+- **`default`:** Used to run and establish jupyter lab for easy use in the browser without the need for an IDE
+- **`operaapp`:** Used for data retrieval, preprocessing, and everything else related to the OPERA data
+
+- For local installation: x64-based Linux, Windows, and OSX as well as ARM-based OSX are supported. [Pixi local installation steps](https://pixi.sh/latest/installation/)
+- For Docker installation: Container will be Linux x64-based, which may lead to slower processing on ARM-based hardware due to additional virtualization layer(s). [Docker installation steps](https://docs.docker.com/engine/install/)
+
+## How to Reproduce
+
+Reproducibility is handled by *Pixi Tasks*, which executes the data pipeline by leveraging the Pixi CLI to run the needed Python files. This is accomplished using the *src/autodbm.reproduce.py* file.
+
+1. Make sure the Pixi manifest and Python environments are established and initialized.
+```bash
+pixi install -a
+```
+
+2. Register the operaapp environment for use in jupyter lab
+```bash
+pixi run register-kernel
+```
+
+4. Start your jupyter lab instance for easy use in the browser. Click on one of the generated links to open
+```bash
+pixi run lab
+```
+
+You can now run the code in the .ipynb or run the .py files via the terminal. This repo is still under development, so further instructions on how to use these scripts will be added shortly.
