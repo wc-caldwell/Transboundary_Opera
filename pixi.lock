@@ -24034,7 +24034,7 @@ packages:
 - pypi: ./
   name: transboundary-opera
   version: 0.1.0
-  sha256: 681fe059b8d85f40e8b1c4fc1a9a771c128e4114263cf5c5b767b090b0bc38c6
+  sha256: 8a4be0658fb75186101041930d065e0a7e7a18a4979eb581c2747b53110c499d
   requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/91/88/b55b3117287a8540b76dbdd87733808d4d01c8067a3b339408c250bb3600/typeguard-4.5.1-py3-none-any.whl
   name: typeguard
