@@ -1,0 +1,65 @@
+========================================================================
+ Aquifer: N015  |  Frame: 40298
+========================================================================
+  [1/5] Reformatting displacement stack ...
+Wrote minimal dataset: <xarray.Dataset> Size: 6MB
+Dimensions:                 (time: 194, y: 1907, x: 724)
+Coordinates:
+  * time                    (time) datetime64[ns] 2kB 2016-08-06T01:00:12.766...
+  * y                       (y) float64 15kB 3.611e+06 3.611e+06 ... 3.554e+06
+  * x                       (x) float64 6kB 3.92e+05 3.92e+05 ... 4.137e+05
+Data variables:
+    spatial_ref             (time) int64 2kB 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0
+    reference_time          (time) datetime64[ns] 2kB dask.array<chunksize=(1,), meta=np.ndarray>
+    water_mask              (y, x) float32 6MB dask.array<chunksize=(512, 512), meta=np.ndarray>
+    perpendicular_baseline  (time) float32 776B dask.array<chunksize=(1,), meta=np.ndarray>
+Attributes:
+    Conventions:         CF-1.8
+    contact:             opera-sds-ops@jpl.nasa.gov
+    institution:         NASA JPL
+    mission_name:        OPERA
+    reference_document:  JPL D-108765
+    title:               OPERA_L3_DISP-S1 Product
+ in 14.3s
+Writing remaining variables: Data variables:
+    temporal_coherence          (time, y, x) float32 1GB dask.array<chunksize=(32, 512, 512), meta=np.ndarray>
+    recommended_mask            (time, y, x) float32 1GB dask.array<chunksize=(32, 512, 512), meta=np.ndarray>
+    average_temporal_coherence  (y, x) float32 6MB dask.array<chunksize=(512, 512), meta=np.ndarray>
+Wrote remaining: 14.8s
+Creating rebased stack with chunks: {'time': 32, 'y': 256, 'x': 256}
+Wrote displacement at 189.2s
+Wrote short_wavelength_displacement at 298.6s
+  [2/5] Downloading static geometry data ...
+OPERA DISP-S1 data downloaded, moving to static layers... 
+  Warning: attempt 1 failed: HTTPSConnectionPool(host='cmr.earthdata.nasa.gov', port=443): Max retries exceeded with url: /search/granules.umm_json (Caused by NameResolutionError("HTTPSConnection(host='cmr.earthdata.nasa.gov', port=443): Failed to resolve 'cmr.earthdata.nasa.gov' ([Errno -2] Name or service not known)"))
+    Retrying in 10s ...
+OPERA DISP-S1 data downloaded, moving to static layers... 
+number of static layer files to download:  27
+[PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322385-IW3_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322385-IW2_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322385-IW1_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322384-IW3_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322384-IW2_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322384-IW1_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322383-IW3_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322383-IW2_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322383-IW1_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322382-IW3_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322382-IW2_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322382-IW1_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322381-IW3_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322381-IW2_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322381-IW1_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322380-IW3_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322380-IW2_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322380-IW1_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322379-IW3_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322379-IW2_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322379-IW1_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322378-IW3_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322378-IW2_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322378-IW1_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322377-IW3_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322377-IW2_20140403_S1A_v1.0.h5'), PosixPath('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322377-IW1_20140403_S1A_v1.0.h5')]
+Traceback (most recent call last):
+  File "/home/clayc/git_repos/Transboundary_Opera/code/process_data/process_frame.py", line 366, in <module>
+    main()
+  File "/home/clayc/git_repos/Transboundary_Opera/code/process_data/process_frame.py", line 356, in main
+    process_frame(
+  File "/home/clayc/git_repos/Transboundary_Opera/code/process_data/process_frame.py", line 264, in process_frame
+    _download_static(
+  File "/home/clayc/git_repos/Transboundary_Opera/code/process_data/process_frame.py", line 112, in _download_static
+    run1_download_DISP_S1_Static.main(inps)
+  File "/home/clayc/git_repos/Transboundary_Opera/src/transboundary_opera/run1_download_DISP_S1_Static.py", line 283, in main
+    output_files = stitch_geometry_layers(list_static_files, output_dir=geomDir)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/opera_utils/geometry.py", line 257, in stitch_geometry_layers
+    stitching.merge_images(
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/opera_utils/stitching.py", line 116, in merge_images
+    projection = _get_mode_projection(file_list)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/opera_utils/stitching.py", line 316, in _get_mode_projection
+    projs = [gdal.Open(fspath(fn)).GetProjection() for fn in filenames]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/opera_utils/stitching.py", line 316, in <listcomp>
+    projs = [gdal.Open(fspath(fn)).GetProjection() for fn in filenames]
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/osgeo/gdal.py", line 12912, in Open
+    return _gdal.Open(*args)
+           ^^^^^^^^^^^^^^^^^
+RuntimeError: NETCDF:"/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N015/40298/orbit_data/OPERA_L2_CSLC-S1-STATIC_T151-322383-IW1_20140403_S1A_v1.0.h5":"//data/los_east": No such file or directory

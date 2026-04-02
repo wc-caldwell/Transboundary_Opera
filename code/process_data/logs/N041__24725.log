@@ -1,0 +1,77 @@
+========================================================================
+ Aquifer: N041  |  Frame: 24725
+========================================================================
+  [1/5] Reformatting displacement stack ...
+Traceback (most recent call last):
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/file_manager.py", line 219, in _acquire_with_cache_info
+    file = self._cache[self._key]
+           ~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/lru_cache.py", line 56, in __getitem__
+    value = self._cache[key]
+            ~~~~~~~~~~~^^^^^
+KeyError: [<class 'h5netcdf.core.File'>, ('/home/clayc/Documents/US_Mex_InSAR/OPERA_data/N041/24725/subset-ncs/OPERA_L3_DISP-S1_IW_F24725_VV_20200120T013232Z_20200706T013236Z_v1.0_20250416T230734Z.nc',), 'r', (('decode_vlen_strings', True), ('driver', None), ('format', 'NETCDF4'), ('invalid_netcdf', None), ('phony_dims', 'access')), '64f9b8fe-e52a-4032-8cf9-1a857dcc1c16']
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/clayc/git_repos/Transboundary_Opera/code/process_data/process_frame.py", line 366, in <module>
+    main()
+  File "/home/clayc/git_repos/Transboundary_Opera/code/process_data/process_frame.py", line 356, in main
+    process_frame(
+  File "/home/clayc/git_repos/Transboundary_Opera/code/process_data/process_frame.py", line 239, in process_frame
+    _reformat.reformat_stack(
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/opera_utils/disp/_reformat.py", line 170, in reformat_stack
+    ds = xr.open_mfdataset(dps.filenames, engine="h5netcdf", chunks=process_chunk_dict)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/api.py", line 1638, in open_mfdataset
+    ds = open_(p, **open_kwargs)
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/api.py", line 607, in open_dataset
+    backend_ds = backend.open_dataset(
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/h5netcdf_.py", line 540, in open_dataset
+    store = H5NetCDFStore.open(
+            ^^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/h5netcdf_.py", line 242, in open
+    return cls(
+           ^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/h5netcdf_.py", line 152, in __init__
+    self._filename = find_root_and_group(self.ds)[0].filename
+                                         ^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/h5netcdf_.py", line 260, in ds
+    return self._acquire()
+           ^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/h5netcdf_.py", line 252, in _acquire
+    with self._manager.acquire_context(needs_lock) as root:
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/file_manager.py", line 207, in acquire_context
+    file, cached = self._acquire_with_cache_info(needs_lock)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/xarray/backends/file_manager.py", line 225, in _acquire_with_cache_info
+    file = self._opener(*self._args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/h5netcdf/core.py", line 1920, in __init__
+    if self._h5file.attrs.get("_nc3_strict")
+       ^^^^^^^^^^^^^^^^^^
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/h5py/_hl/files.py", line 296, in attrs
+    return attrs.AttributeManager(self['/'])
+                                  ~~~~^^^^^
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/h5py/_hl/group.py", line 367, in __getitem__
+    oid = h5o.open(self.id, self._e(name), lapl=self._lapl)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "h5py/_objects.pyx", line 54, in h5py._objects.with_phil.wrapper
+  File "h5py/_objects.pyx", line 55, in h5py._objects.with_phil.wrapper
+  File "h5py/h5o.pyx", line 255, in h5py.h5o.open
+KeyError: 'Unable to synchronously open object (bad object header version number)'
+Exception ignored in: <function File.close at 0x7f3172e84720>
+Traceback (most recent call last):
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/h5netcdf/core.py", line 2091, in close
+    self.flush()
+  File "/home/clayc/git_repos/Transboundary_Opera/.pixi/envs/operaapp/lib/python3.11/site-packages/h5netcdf/core.py", line 2042, in flush
+    if self._writable:
+       ^^^^^^^^^^^^^^
+AttributeError: 'File' object has no attribute '_writable'

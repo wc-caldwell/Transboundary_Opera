@@ -1,0 +1,33 @@
+========================================================================
+ Aquifer: N043  |  Frame: 7092
+========================================================================
+  [1/5] Reformatting displacement stack ...
+Wrote minimal dataset: <xarray.Dataset> Size: 76MB
+Dimensions:                 (time: 239, y: 5646, x: 3342)
+Coordinates:
+  * time                    (time) datetime64[ns] 2kB 2016-10-20T13:28:05.006...
+  * y                       (y) float64 45kB 3.591e+06 3.591e+06 ... 3.422e+06
+  * x                       (x) float64 27kB 3.948e+05 3.948e+05 ... 4.95e+05
+Data variables:
+    spatial_ref             (time) int64 2kB 0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0
+    reference_time          (time) datetime64[ns] 2kB dask.array<chunksize=(1,), meta=np.ndarray>
+    water_mask              (y, x) float32 75MB dask.array<chunksize=(512, 512), meta=np.ndarray>
+    perpendicular_baseline  (time) float32 956B dask.array<chunksize=(1,), meta=np.ndarray>
+Attributes:
+    Conventions:         CF-1.8
+    contact:             opera-sds-ops@jpl.nasa.gov
+    institution:         NASA JPL
+    mission_name:        OPERA
+    reference_document:  JPL D-108765
+    title:               OPERA_L3_DISP-S1 Product
+ in 21.0s
+Writing remaining variables: Data variables:
+    temporal_coherence          (time, y, x) float32 18GB dask.array<chunksize=(32, 512, 512), meta=np.ndarray>
+    recommended_mask            (time, y, x) float32 18GB dask.array<chunksize=(32, 512, 512), meta=np.ndarray>
+    average_temporal_coherence  (y, x) float32 75MB dask.array<chunksize=(512, 512), meta=np.ndarray>
+Wrote remaining: 29.3s
+Creating rebased stack with chunks: {'time': 32, 'y': 256, 'x': 256}
+Wrote displacement at 31829.2s
+Wrote short_wavelength_displacement at 34001.8s
+  [2/5] Downloading static geometry data ...
+OPERA DISP-S1 data downloaded, moving to static layers... 
